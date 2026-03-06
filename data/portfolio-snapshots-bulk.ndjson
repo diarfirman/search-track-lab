@@ -1,0 +1,36 @@
+{"index":{"_id":"SNAP-001"}}
+{"snapshot_id":"SNAP-001","snapshot_date":"2025-01-17","account_id":"ACC-001","customer_name":"Alice Nguyen","risk_profile":"aggressive","ticker":"AAPL","company_name":"Apple Inc.","sector":"Technology","shares_held":120,"avg_cost_basis":172.4,"current_price":229.0,"market_value":27480.0,"unrealized_pnl":6792.0,"pnl_pct":32.86,"currency":"USD"}
+{"index":{"_id":"SNAP-002"}}
+{"snapshot_id":"SNAP-002","snapshot_date":"2025-01-17","account_id":"ACC-001","customer_name":"Alice Nguyen","risk_profile":"aggressive","ticker":"NVDA","company_name":"NVIDIA Corp.","sector":"Technology","shares_held":12,"avg_cost_basis":582.0,"current_price":790.0,"market_value":9480.0,"unrealized_pnl":2496.0,"pnl_pct":35.74,"currency":"USD"}
+{"index":{"_id":"SNAP-003"}}
+{"snapshot_id":"SNAP-003","snapshot_date":"2025-01-17","account_id":"ACC-001","customer_name":"Alice Nguyen","risk_profile":"aggressive","ticker":"LLY","company_name":"Eli Lilly & Co.","sector":"Healthcare","shares_held":8,"avg_cost_basis":762.5,"current_price":810.0,"market_value":6480.0,"unrealized_pnl":380.0,"pnl_pct":6.23,"currency":"USD"}
+{"index":{"_id":"SNAP-004"}}
+{"snapshot_id":"SNAP-004","snapshot_date":"2025-01-17","account_id":"ACC-002","customer_name":"Brian Okafor","risk_profile":"moderate","ticker":"MSFT","company_name":"Microsoft Corp.","sector":"Technology","shares_held":30,"avg_cost_basis":378.9,"current_price":415.6,"market_value":12468.0,"unrealized_pnl":1101.0,"pnl_pct":9.69,"currency":"USD"}
+{"index":{"_id":"SNAP-005"}}
+{"snapshot_id":"SNAP-005","snapshot_date":"2025-01-17","account_id":"ACC-002","customer_name":"Brian Okafor","risk_profile":"moderate","ticker":"META","company_name":"Meta Platforms Inc.","sector":"Technology","shares_held":18,"avg_cost_basis":559.2,"current_price":590.0,"market_value":10620.0,"unrealized_pnl":554.4,"pnl_pct":5.51,"currency":"USD"}
+{"index":{"_id":"SNAP-006"}}
+{"snapshot_id":"SNAP-006","snapshot_date":"2025-01-17","account_id":"ACC-003","customer_name":"Carmen Lopez","risk_profile":"conservative","ticker":"JPM","company_name":"JPMorgan Chase","sector":"Financials","shares_held":25,"avg_cost_basis":198.75,"current_price":218.0,"market_value":5450.0,"unrealized_pnl":481.25,"pnl_pct":9.68,"currency":"USD"}
+{"index":{"_id":"SNAP-007"}}
+{"snapshot_id":"SNAP-007","snapshot_date":"2025-01-17","account_id":"ACC-003","customer_name":"Carmen Lopez","risk_profile":"conservative","ticker":"XOM","company_name":"Exxon Mobil Corp.","sector":"Energy","shares_held":60,"avg_cost_basis":107.8,"current_price":115.4,"market_value":6924.0,"unrealized_pnl":456.0,"pnl_pct":7.05,"currency":"USD"}
+{"index":{"_id":"SNAP-008"}}
+{"snapshot_id":"SNAP-008","snapshot_date":"2025-01-17","account_id":"ACC-004","customer_name":"David Kim","risk_profile":"aggressive","ticker":"TSLA","company_name":"Tesla Inc.","sector":"Consumer Discretionary","shares_held":20,"avg_cost_basis":242.1,"current_price":388.0,"market_value":7760.0,"unrealized_pnl":2918.0,"pnl_pct":60.22,"currency":"USD"}
+{"index":{"_id":"SNAP-009"}}
+{"snapshot_id":"SNAP-009","snapshot_date":"2025-01-17","account_id":"ACC-004","customer_name":"David Kim","risk_profile":"aggressive","ticker":"AMD","company_name":"Advanced Micro Devices","sector":"Technology","shares_held":55,"avg_cost_basis":122.4,"current_price":135.0,"market_value":7425.0,"unrealized_pnl":693.0,"pnl_pct":10.29,"currency":"USD"}
+{"index":{"_id":"SNAP-010"}}
+{"snapshot_id":"SNAP-010","snapshot_date":"2025-01-17","account_id":"ACC-004","customer_name":"David Kim","risk_profile":"aggressive","ticker":"BRK.B","company_name":"Berkshire Hathaway B","sector":"Financials","shares_held":35,"avg_cost_basis":368.5,"current_price":398.0,"market_value":13930.0,"unrealized_pnl":1032.5,"pnl_pct":8.0,"currency":"USD"}
+{"index":{"_id":"SNAP-011"}}
+{"snapshot_id":"SNAP-011","snapshot_date":"2025-01-17","account_id":"ACC-005","customer_name":"Elena Rossi","risk_profile":"conservative","ticker":"JNJ","company_name":"Johnson & Johnson","sector":"Healthcare","shares_held":40,"avg_cost_basis":152.3,"current_price":159.0,"market_value":6360.0,"unrealized_pnl":268.0,"pnl_pct":4.4,"currency":"USD"}
+{"index":{"_id":"SNAP-012"}}
+{"snapshot_id":"SNAP-012","snapshot_date":"2025-01-17","account_id":"ACC-005","customer_name":"Elena Rossi","risk_profile":"conservative","ticker":"DIS","company_name":"Walt Disney Co.","sector":"Communication Services","shares_held":35,"avg_cost_basis":94.8,"current_price":102.5,"market_value":3587.5,"unrealized_pnl":269.5,"pnl_pct":8.12,"currency":"USD"}
+{"index":{"_id":"SNAP-013"}}
+{"snapshot_id":"SNAP-013","snapshot_date":"2025-01-17","account_id":"ACC-006","customer_name":"Frank Zhang","risk_profile":"moderate","ticker":"V","company_name":"Visa Inc.","sector":"Financials","shares_held":22,"avg_cost_basis":298.6,"current_price":312.0,"market_value":6864.0,"unrealized_pnl":294.8,"pnl_pct":4.49,"currency":"USD"}
+{"index":{"_id":"SNAP-014"}}
+{"snapshot_id":"SNAP-014","snapshot_date":"2025-01-17","account_id":"ACC-006","customer_name":"Frank Zhang","risk_profile":"moderate","ticker":"CVX","company_name":"Chevron Corp.","sector":"Energy","shares_held":45,"avg_cost_basis":148.2,"current_price":162.0,"market_value":7290.0,"unrealized_pnl":621.0,"pnl_pct":9.31,"currency":"USD"}
+{"index":{"_id":"SNAP-015"}}
+{"snapshot_id":"SNAP-015","snapshot_date":"2025-01-17","account_id":"ACC-006","customer_name":"Frank Zhang","risk_profile":"moderate","ticker":"MSFT","company_name":"Microsoft Corp.","sector":"Technology","shares_held":28,"avg_cost_basis":415.6,"current_price":430.0,"market_value":12040.0,"unrealized_pnl":403.2,"pnl_pct":3.46,"currency":"USD"}
+{"index":{"_id":"SNAP-016"}}
+{"snapshot_id":"SNAP-016","snapshot_date":"2025-01-17","account_id":"ACC-001","customer_name":"Alice Nguyen","risk_profile":"aggressive","ticker":"GOOGL","company_name":"Alphabet Inc.","sector":"Technology","shares_held":40,"avg_cost_basis":155.0,"current_price":192.0,"market_value":7680.0,"unrealized_pnl":1480.0,"pnl_pct":23.87,"currency":"USD"}
+{"index":{"_id":"SNAP-017"}}
+{"snapshot_id":"SNAP-017","snapshot_date":"2025-01-17","account_id":"ACC-003","customer_name":"Carmen Lopez","risk_profile":"conservative","ticker":"JNJ","company_name":"Johnson & Johnson","sector":"Healthcare","shares_held":20,"avg_cost_basis":148.0,"current_price":159.0,"market_value":3180.0,"unrealized_pnl":220.0,"pnl_pct":7.43,"currency":"USD"}
+{"index":{"_id":"SNAP-018"}}
+{"snapshot_id":"SNAP-018","snapshot_date":"2025-01-17","account_id":"ACC-005","customer_name":"Elena Rossi","risk_profile":"conservative","ticker":"V","company_name":"Visa Inc.","sector":"Financials","shares_held":15,"avg_cost_basis":285.0,"current_price":312.0,"market_value":4680.0,"unrealized_pnl":405.0,"pnl_pct":9.47,"currency":"USD"}
