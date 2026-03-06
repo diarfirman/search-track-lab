@@ -50,7 +50,7 @@ This hands-on lab guide walks you through building AI-powered agents with Elasti
 
 Navigate to the Elastic Cloud registration page and create your free 14-day trial account.
 
-1. Go to [Elastic Serverless Trial]([https://docs.github.com](http://cloud.elastic.co/serverless-registration)) and click **Start free trial**
+1. Go to [Elastic Serverless Trial](http://cloud.elastic.co/serverless-registration) and click **Start free trial**
 2. Enter your email address and create a password, then verify your email.
 3. Once logged in, you will see the Elastic Cloud home page. Click **Create project**.
 
