@@ -50,11 +50,15 @@ This hands-on lab guide walks you through building AI-powered agents with Elasti
 
 Navigate to the Elastic Cloud registration page and create your free 14-day trial account.
 
+<img width="3832" height="2088" alt="image" src="https://github.com/user-attachments/assets/bbb8d092-3ffe-4c9e-9621-9d5d97bb0640" />
+
 1. Go to [Elastic Serverless Trial](http://cloud.elastic.co/serverless-registration) and click **Start free trial**
 2. Enter your email address and create a password, then verify your email.
 3. Once logged in, you will see the Elastic Cloud home page. Click **Create project**.
 
 ### Step 1.2 — Create a Serverless Elasticsearch Project
+
+<img width="3839" height="2001" alt="image" src="https://github.com/user-attachments/assets/82b13aff-8df7-4628-9b90-0bccacc671dc" />
 
 1. Select the **Elasticsearch** project type from the available options.
 2. Enter a project name, for example: `Financial-AI-Lab`
@@ -62,6 +66,9 @@ Navigate to the Elastic Cloud registration page and create your free 14-day tria
 4. Click **Create project** and wait for provisioning to complete (typically 1–2 minutes).
 
 ### Step 1.3 — Save Your Connection Details
+
+<img width="3067" height="1531" alt="image" src="https://github.com/user-attachments/assets/2efc0e99-fb18-4de3-86d0-9f75b292cb46" />
+
 
 Once your project is ready, save the following details — you will need them throughout the lab:
 
@@ -72,6 +79,8 @@ Once your project is ready, save the following details — you will need them th
 | API Key | Security → API Keys → Create API Key |
 
 ### Step 1.4 — Generate an API Key
+
+<img width="3823" height="2017" alt="image" src="https://github.com/user-attachments/assets/80880139-9dee-4444-bc2c-6348e6eafa05" />
 
 > **Important:** The API Key is only displayed once at creation time. Store it in a safe place before closing the dialog. You will need this key in Lab 3 when running the data generator.
 
@@ -89,24 +98,34 @@ Once your project is ready, save the following details — you will need them th
 
 ### Step 2.1 — Navigate to Agent Builder
 
+<img width="3839" height="2013" alt="image" src="https://github.com/user-attachments/assets/8122db69-cbb6-4c9a-b31c-9eed26d58a4b" />
+
 1. Log in to your Kibana instance using the URL saved in Lab 1.
 2. In the left navigation panel, search for or scroll to find **Agents** under the AI-powered features section.
 3. Alternatively, use the global search (the magnifying glass icon) and type `Agents`.
 
 ### Step 2.2 — Explore the Default Agent
 
-You will see the Agent Builder landing page with two tabs: **Agents** and **Tools**. The default Elastic AI Agent is pre-configured and ready to use.
+<img width="3839" height="2011" alt="image" src="https://github.com/user-attachments/assets/e496e86c-d734-499e-a259-e5ab688fbbc4" />
+<img width="3839" height="2010" alt="image" src="https://github.com/user-attachments/assets/e37be978-42be-45cf-b581-0edc6a253423" />
 
-1. Click on the **Agents** tab to see the list of available agents.
-2. Click on **Elastic AI Agent** to view its configuration.
-3. Note the configured tools — this built-in agent has access to all built-in Elastic tools.
+You will see the Agent Builder landing page. The default Elastic AI Agent is pre-configured and ready to use.
+
+1. Click on **More** on the to right of the page and click **Agents** tab to see the list of available agents.
+2. Currently you only have **Elastic AI Agent**.
+3. To see the configured tools, you can click on **Manage Tools** — built-in agent has access to all built-in Elastic tools.
+
+<img width="3833" height="2011" alt="image" src="https://github.com/user-attachments/assets/5e6eeef6-5e8b-4ba9-9092-2deca944ed3b" />
 
 > **Tip:** Before adding your own data, the agent can only respond with its built-in knowledge and tools. In the next lab, you will load financial data so the agent can provide meaningful domain-specific answers.
 
 ### Step 2.3 — Start a Conversation
 
+<img width="3831" height="1926" alt="image" src="https://github.com/user-attachments/assets/2d1654d3-e35b-4d5e-a471-28f28c792f14" />
+
 1. Click the chat icon or the **Open chat** button next to the Elastic AI Agent.
 2. Try this first query to test the agent's capabilities without any custom data:
+<img width="600" height="200" alt="image" src="https://github.com/user-attachments/assets/19d149af-df31-4652-b8b0-d7c01caa5145" />
 
 ```
 What indices are available in this Elasticsearch cluster?
@@ -118,6 +137,7 @@ What indices are available in this Elasticsearch cluster?
 ```
 What are the built-in tools available to you?
 ```
+<img width="600" height="600" alt="image" src="https://github.com/user-attachments/assets/08247e71-fe97-4ed8-89a9-3f439d854b37" />
 
 ---
 
@@ -336,6 +356,7 @@ This tool will allow the agent to look up financial transactions for a specific 
 | Type | ES\|QL |
 | Description | Retrieves recent financial transactions for a specific stock ticker symbol. Use this when the user asks about trading activity, transaction history, or buy/sell orders for a specific stock. Parameter: ticker (required) — the stock symbol e.g. AAPL, GOOG. |
 
+
 3. Enter the following ES|QL query:
 
 ```esql
@@ -351,6 +372,9 @@ FROM financial-transactions
 | Parameter Name | Type | Description | Required |
 |----------------|------|-------------|----------|
 | `ticker` | string | Stock ticker symbol (e.g., AAPL, GOOG, MSFT) | Yes |
+
+<img width="3834" height="2013" alt="image" src="https://github.com/user-attachments/assets/a6e35cf5-0257-4bad-9fec-390260bb07a9" />
+
 
 5. Click **Save and test**. Enter `AAPL` as the test ticker — you should see 3 results (TXN-001, TXN-009, TXN-015 from Alice and Carmen).
 
@@ -414,6 +438,9 @@ Model Context Protocol (MCP) tools allow your agent to call external services. I
 
 First, you need to create an MCP connector in Kibana that points to the Excalidraw MCP server.
 
+<img width="3837" height="2013" alt="image" src="https://github.com/user-attachments/assets/0529e04c-eeb8-473d-9a49-b3f92cf0beac" />
+
+
 1. In Kibana, navigate to **Stack Management → Connectors**.
 2. Click **Create connector** and search for **MCP** in the connector type list.
 3. Configure the connector with the following settings:
@@ -424,7 +451,13 @@ First, you need to create an MCP connector in Kibana that points to the Excalidr
 | MCP Server URL | `https://mcp.excalidraw.com` |
 | Authentication | None (public server) |
 
-4. Click **Save** and verify the connector shows a green status indicator.
+<img width="600" height="600" alt="image" src="https://github.com/user-attachments/assets/b846edca-5166-4c34-90fd-c6f3ac5f90b9" />
+
+
+4. Click **Save and Test** and verify the connector shows a green status indicator.
+
+   <img width="600" height="600" alt="image" src="https://github.com/user-attachments/assets/4c030340-23ba-4de9-a095-9d6a1a1a64d6" />
+
 
 > **Note:** The Excalidraw MCP server provides tools for creating diagrams, adding shapes, text, and arrows, and exporting diagrams in various formats. These tools give your agent powerful visual output capabilities.
 
@@ -432,12 +465,15 @@ First, you need to create an MCP connector in Kibana that points to the Excalidr
 
 Now you will bulk-import the available tools from the Excalidraw MCP server.
 
+<img width="3831" height="2013" alt="image" src="https://github.com/user-attachments/assets/23c51759-1c75-499d-a847-2f3b8d0db3dc" />
+
 1. Navigate back to the **Agents** page and click the **Tools** tab.
 2. Click the **Manage MCP** dropdown and select **Bulk import MCP tools**.
 3. In the **MCP Server** field, select the Excalidraw MCP connector you just created.
 4. Wait for the tool list to populate, then select all available tools.
 5. Set the namespace to `excalidraw` (the tool IDs will be generated as `excalidraw.tool-name`).
-6. Click **Import tools**.
+   <img width="3835" height="2013" alt="image" src="https://github.com/user-attachments/assets/86901de5-74a1-48b5-bd46-4fa6faa29841" />
+7. Click **Import tools**.
 
 ### Step 5.3 — Verify MCP Tool Health
 
