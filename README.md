@@ -481,22 +481,6 @@ Now you will bulk-import the available tools from the Excalidraw MCP server.
 2. All imported tools should display without warning icons.
 3. If a tool shows an error icon, verify the connector URL is correct and that the MCP server is reachable.
 
-### Step 5.4 — Test an MCP Tool Directly
-
-1. Find the `excalidraw` tool in the tools list and click the play (test) button.
-2. Enter a simple test input such as: `Create a simple rectangle with the label 'Portfolio'.`
-3. Verify the tool executes and returns a result from the Excalidraw server.
-
-### Advice on Free MCP Servers to Explore
-
-Beyond Excalidraw, here are other free MCP servers you can integrate with your Elastic Agent Builder:
-
-| MCP Server | URL | Useful For |
-|------------|-----|------------|
-| Excalidraw | `mcp.excalidraw.com` | Creating diagrams and visual data maps |
-| Context7 | `mcp.context7.com` | Fetching up-to-date library documentation |
-| Brave Search | Via Brave API key | Real-time web search for market news |
-| GitHub MCP | Via GitHub token | Code repository and issue search |
 
 ---
 
