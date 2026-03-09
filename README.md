@@ -401,8 +401,10 @@ FROM portfolio-snapshots
 | SORT total_value DESC
 ```
 
-3. Add a parameter for `account_id` (string, required).
+3. Add a parameter for `account_id` (string, required) and the description.
 4. Save and test with `account_id = ACC-001` (Alice Nguyen). You should see sectors: Technology, Healthcare.
+   <img width="600" height="600" alt="image" src="https://github.com/user-attachments/assets/648c31e2-205e-4fc9-b7c7-a320c0076165" />
+
 
 ### Step 4.3 — Create an Index Search Tool: Financial Data Explorer
 
@@ -497,7 +499,8 @@ Now that you have created tools, you will build a custom Financial Analyst agent
 
 | Field | Value |
 |-------|-------|
-| Agent Name | Financial Analyst Agent |
+| Agent ID | financial_analyst_agent |
+| Display Name | Financial Analyst Agent |
 | Description | An AI agent specialized in analyzing synthetic financial data including transactions, portfolio holdings, and market events. |
 
 ### Step 6.2 — Write the System Prompt
@@ -521,6 +524,8 @@ Guidelines:
 5. Present numerical data in a clear, structured format
 6. Always note that this is SYNTHETIC data for demonstration purposes
 ```
+<img width="3834" height="2011" alt="image" src="https://github.com/user-attachments/assets/c11e94e2-17ec-4b3b-9c53-adc5305bfd3c" />
+
 
 ### Step 6.3 — Assign Tools to the Agent
 
@@ -532,7 +537,11 @@ Guidelines:
    - `finance.get_portfolio_summary`
    - `finance.search_financial_data`
    - All `excalidraw.*` tools from Lab 5
+     
+  <img width="3822" height="2007" alt="image" src="https://github.com/user-attachments/assets/92fa9e90-4a78-473e-948a-b2f77237ef78" />
+
 3. Click **Save agent**.
+   
 
 ### Step 6.4 — Test Your Custom Agent
 
@@ -562,8 +571,13 @@ Look up NVDA transactions for Alice Nguyen, then check what market events happen
 
 **Test the Excalidraw MCP tool:**
 ```
-Create a diagram showing all 6 customer accounts grouped by risk profile
+Create a diagram showing all 6 customer accounts grouped by risk profile and return the shareable link
 ```
+<img width="700" height="600" alt="image" src="https://github.com/user-attachments/assets/e5f150fc-11fc-4087-93ec-d79a192dc4f6" />
+
+Click on the link, you will be redirect to excalidraw page.
+
+<img width="3839" height="2009" alt="image" src="https://github.com/user-attachments/assets/f2aedc4b-1142-4a73-bd26-3914bb205d82" />
 
 ---
 
