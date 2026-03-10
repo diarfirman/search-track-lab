@@ -575,7 +575,7 @@ Create a diagram showing all 6 customer accounts grouped by risk profile and ret
 ```
 <img width="700" height="600" alt="image" src="https://github.com/user-attachments/assets/e5f150fc-11fc-4087-93ec-d79a192dc4f6" />
 
-Click on the link, you will be redirect to excalidraw page.
+Click on the link, you will be redirect to excalidraw page. The diagram created by excalidraw should be similar to this.
 
 <img width="3839" height="2009" alt="image" src="https://github.com/user-attachments/assets/f2aedc4b-1142-4a73-bd26-3914bb205d82" />
 
@@ -596,7 +596,7 @@ Elastic Agent Builder exposes programmatic interfaces that allow you to integrat
 
 > **Note:** For production use, consider using the MCP Server interface if you want to connect external MCP-compatible clients like Claude Desktop or Cursor directly to your Elastic Agent Builder agents.
 
-> **Tip:** The MCP Server and A2A Server features were in Preview as of early 2026. Check the Elastic documentation for the latest status and capabilities of these interfaces.
+> **Tip:** Check the Elastic documentation for the latest status and capabilities of MCP Server and A2A Server features interfaces.
 
 ### Step 7.1 — Find Your Agent ID
 
@@ -611,10 +611,10 @@ The Kibana REST API allows you to create a new conversation and send messages to
 2. Create a new conversation:
 
 ```json
-POST kbn:/api/chat/conversations
+POST kbn://api/agent_builder/converse
 {
-  "agentId": "your-agent-id-here",
-  "title": "API Test Conversation"
+  "input": "what help you can provide?",
+  "agent_id": "financial_analyst_agent"
 }
 ```
 
@@ -623,9 +623,11 @@ POST kbn:/api/chat/conversations
 4. Send a message to the conversation:
 
 ```json
-POST kbn:/api/chat/conversations/{conversationId}/messages
+POST kbn://api/agent_builder/converse/async
 {
-  "content": "Show me the last 5 transactions for AAPL"
+  "input": "Show me the last 5 transactions for AAPL",
+  "agent_id": "financial_analyst_agent",
+  "conversation_id": "15e68f81-5648-4e73-b11b-2b8b3c080550"
 }
 ```
 
@@ -636,10 +638,13 @@ POST kbn:/api/chat/conversations/{conversationId}/messages
 You can also call the API from outside Kibana using curl and your API key:
 
 ```bash
-curl -X POST 'https://your-kibana-url/api/chat/conversations' \
-  -H 'Content-Type: application/json' \
-  -H 'Authorization: ApiKey your-api-key' \
-  -d '{"agentId": "your-agent-id", "title": "External Test"}'
+curl -X POST "${KIBANA_URL}/api/agent_builder/converse" \
+     -H "Authorization: ApiKey ${API_KEY}" \
+     -H "kbn-xsrf: true" \
+     -H "Content-Type: application/json" \
+     -d '{
+       "input": "what help you can provide?",
+       "agent_id": "financial_analyst_agent"}'
 ```
 
 ### Step 7.4 — Explore MCP Server Access
@@ -656,229 +661,156 @@ Your Elastic Agent Builder can act as an MCP server, exposing your agents and to
 
 ### A. ES|QL Query Reference for the Sample Dataset
 
-All queries below target the three indices loaded in Lab 3 and can be tested directly in Kibana Dev Tools (Management → Dev Tools) using the `POST /_query` endpoint.
+All queries below target the three indices loaded in Lab 3 and can be tested directly in **Discover Menu**.
+
+<img width="3830" height="2004" alt="image" src="https://github.com/user-attachments/assets/a23de7b2-f53f-4d75-83d3-7a861173a347" />
+
 
 #### Group 1 — Transaction Analysis
 
 **Q1 — Latest trades for a specific ticker**
 ```esql
-POST /_query
-{
-  "query": """
-    FROM financial-transactions
-      | WHERE ticker == "AAPL"
-      | SORT timestamp DESC
-      | LIMIT 10
-  """
-}
+FROM financial-transactions
+| WHERE ticker == "AAPL"
+| SORT timestamp DESC
+| LIMIT 10
 ```
 
 **Q2 — Total buy volume by sector**
 ```esql
-POST /_query
-{
-  "query": """
-    FROM financial-transactions
-      | WHERE transaction_type == "buy"
-      | STATS total_bought = SUM(total_value) BY sector
-      | SORT total_bought DESC
-  """
-}
+FROM financial-transactions
+| WHERE transaction_type == "buy"
+| STATS total_bought = SUM(total_value) BY sector
+| SORT total_bought DESC
 ```
 
 **Q3 — Net flow per customer (CASE inside STATS)**
 ```esql
-POST /_query
-{
-  "query": """
-    FROM financial-transactions
-      | STATS
-          buy_vol  = SUM(CASE(transaction_type == "buy",  total_value, 0)),
-          sell_vol = SUM(CASE(transaction_type == "sell", total_value, 0)),
-          net      = SUM(CASE(transaction_type == "buy",  total_value, -total_value))
-        BY customer_name
-      | SORT net DESC
-  """
-}
+FROM financial-transactions
+| STATS
+  buy_vol  = SUM(CASE(transaction_type == "buy",  total_value, 0)),
+  sell_vol = SUM(CASE(transaction_type == "sell", total_value, 0)),
+  net      = SUM(CASE(transaction_type == "buy",  total_value, -total_value))
+BY customer_name
+| SORT net DESC
 ```
 
-**Q4 — Activity in the last 30 days**
+**Q4 — Activity after certain date**
 ```esql
-POST /_query
-{
-  "query": """
-    FROM financial-transactions
-      | WHERE timestamp >= NOW() - 30 days
-      | STATS trades = COUNT(*), total_value = SUM(total_value)
-          BY customer_name, transaction_type
-      | SORT customer_name ASC
-  """
-}
+FROM financial-transactions
+| WHERE timestamp >= "2025-01-01"
+| STATS trades = COUNT(*), total_value = SUM(total_value) BY customer_name, transaction_type
+| SORT customer_name ASC
 ```
 
 **Q5 — Trade volume by broker**
 ```esql
-POST /_query
-{
-  "query": """
-    FROM financial-transactions
-      | STATS trade_count = COUNT(*), total_value = SUM(total_value) BY broker
-      | SORT total_value DESC
-  """
-}
+FROM financial-transactions
+| STATS trade_count = COUNT(*), total_value = SUM(total_value) BY broker
+| SORT total_value DESC
 ```
 
 #### Group 2 — Portfolio Analysis
 
 **Q6 — Portfolio summary by account**
 ```esql
-POST /_query
-{
-  "query": """
-    FROM portfolio-snapshots
-      | STATS
-          total_market_value = SUM(market_value),
-          positions          = COUNT(*),
-          total_pnl          = SUM(unrealized_pnl)
-        BY account_id, customer_name
-      | SORT total_market_value DESC
-  """
-}
+FROM portfolio-snapshots
+| STATS
+  total_market_value = SUM(market_value),
+  positions          = COUNT(*),
+  total_pnl          = SUM(unrealized_pnl)
+  BY account_id, customer_name
+| SORT total_market_value DESC
 ```
 
 **Q7 — Top gaining positions**
 ```esql
-POST /_query
-{
-  "query": """
-    FROM portfolio-snapshots
-      | WHERE pnl_pct > 0
-      | SORT pnl_pct DESC
-      | KEEP ticker, customer_name, shares_held,
-             avg_cost_basis, current_price, unrealized_pnl, pnl_pct
-      | LIMIT 10
-  """
-}
+FROM portfolio-snapshots
+| WHERE pnl_pct > 0
+| SORT pnl_pct DESC
+| KEEP ticker, customer_name, shares_held,
+  avg_cost_basis, current_price, unrealized_pnl, pnl_pct
+| LIMIT 10
 ```
 
 **Q8 — Sector exposure breakdown**
 ```esql
-POST /_query
-{
-  "query": """
-    FROM portfolio-snapshots
-      | STATS
-          sector_value = SUM(market_value),
-          positions    = COUNT(*),
-          avg_return   = AVG(pnl_pct)
-        BY sector
-      | SORT sector_value DESC
-  """
-}
+FROM portfolio-snapshots
+| STATS
+  sector_value = SUM(market_value),
+  positions    = COUNT(*),
+  avg_return   = AVG(pnl_pct)
+  BY sector
+| SORT sector_value DESC
 ```
 
 **Q9 — All holdings for one account**
 ```esql
-POST /_query
-{
-  "query": """
-    FROM portfolio-snapshots
-      | WHERE account_id == "ACC-001"
-      | KEEP ticker, company_name, sector,
-             shares_held, market_value, unrealized_pnl, pnl_pct
-      | SORT pnl_pct DESC
-  """
-}
+FROM portfolio-snapshots
+| WHERE account_id == "ACC-001"
+| KEEP ticker, company_name, sector,
+  shares_held, market_value, unrealized_pnl, pnl_pct
+| SORT pnl_pct DESC
 ```
 
 **Q10 — Portfolio value by risk profile**
 ```esql
-POST /_query
-{
-  "query": """
-    FROM portfolio-snapshots
-      | STATS
-          total_value = SUM(market_value),
-          avg_pnl_pct = AVG(pnl_pct)
-        BY risk_profile
-      | SORT total_value DESC
-  """
-}
+FROM portfolio-snapshots
+| STATS
+  total_value = SUM(market_value),
+  avg_pnl_pct = AVG(pnl_pct)
+  BY risk_profile
+| SORT total_value DESC
 ```
 
 #### Group 3 — Market Event Analysis
 
 **Q11 — Recent positive events**
 ```esql
-POST /_query
-{
-  "query": """
-    FROM market-events
-      | WHERE impact == "positive"
-      | SORT event_date DESC
-      | KEEP event_date, ticker, event_type, headline, price_change_pct
-      | LIMIT 10
-  """
-}
+FROM market-events
+| WHERE impact == "positive"
+| SORT event_date DESC
+| KEEP event_date, ticker, event_type, headline, price_change_pct
+| LIMIT 10
 ```
 
 **Q12 — Average price move by event type**
 ```esql
-POST /_query
-{
-  "query": """
-    FROM market-events
-      | STATS avg_move = AVG(price_change_pct), event_count = COUNT(*)
-          BY event_type
-      | SORT avg_move DESC
-  """
-}
+FROM market-events
+| STATS avg_move = AVG(price_change_pct), event_count = COUNT(*)
+  BY event_type
+| SORT avg_move DESC
 ```
 
 > ✅ **Expected Result:** `fda_approval` and `analyst_upgrade` show the largest average `price_change_pct` in this dataset.
 
 **Q13 — Stocks with bullish analyst ratings**
 ```esql
-POST /_query
-{
-  "query": """
-    FROM market-events
-      | WHERE analyst_rating IN ("buy", "strong_buy")
-      | KEEP event_date, ticker, company_name, headline,
-             analyst_rating, price_change_pct
-      | SORT price_change_pct DESC
-  """
-}
+FROM market-events
+| WHERE analyst_rating IN ("buy", "strong_buy")
+| KEEP event_date, ticker, company_name, headline,
+  analyst_rating, price_change_pct
+| SORT price_change_pct DESC
 ```
 
 **Q14 — Biggest single-day price movers**
 ```esql
-POST /_query
-{
-  "query": """
-    FROM market-events
-      | WHERE price_change_pct IS NOT NULL
-      | SORT price_change_pct DESC
-      | KEEP event_date, ticker, event_type, headline,
-             price_before, price_after, price_change_pct
-      | LIMIT 5
-  """
-}
+FROM market-events
+| WHERE price_change_pct IS NOT NULL
+| SORT price_change_pct DESC
+| KEEP event_date, ticker, event_type, headline,
+  price_before, price_after, price_change_pct
+| LIMIT 5
 ```
 
 #### Group 4 — Advanced Patterns
 
 **Q15 — Most traded tickers by spend**
 ```esql
-POST /_query
-{
-  "query": """
-    FROM financial-transactions
-      | STATS my_trades = COUNT(*), my_spend = SUM(total_value) BY ticker
-      | SORT my_spend DESC
-      | LIMIT 10
-  """
-}
+FROM financial-transactions
+| STATS my_trades = COUNT(*), my_spend = SUM(total_value) BY ticker
+| SORT my_spend DESC
+| LIMIT 10
 ```
 
 **Q16 — Full position analysis for one ticker**
@@ -888,18 +820,13 @@ Demonstrates the `CASE`-inside-`STATS` pattern. In an Agent Builder tool, replac
 > **Tip:** To turn Q16 into an Agent Builder tool: replace `WHERE ticker == "TSLA"` with `WHERE ticker == ?ticker`, then add `ticker` as a required string parameter in the tool definition.
 
 ```esql
-POST /_query
-{
-  "query": """
-    FROM financial-transactions
-      | WHERE ticker == "TSLA"
-      | STATS
-          total_bought = SUM(CASE(transaction_type == "buy",  total_value, 0)),
-          total_sold   = SUM(CASE(transaction_type == "sell", total_value, 0)),
-          net_shares   = SUM(CASE(transaction_type == "buy",  quantity, -quantity))
-        BY ticker
-  """
-}
+FROM financial-transactions
+| WHERE ticker == "TSLA"
+| STATS
+  total_bought = SUM(CASE(transaction_type == "buy",  total_value, 0)),
+  total_sold   = SUM(CASE(transaction_type == "sell", total_value, 0)),
+  net_shares   = SUM(CASE(transaction_type == "buy",  quantity, -quantity))
+  BY ticker
 ```
 
 ---
