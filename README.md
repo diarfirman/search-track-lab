@@ -901,6 +901,7 @@ Now bulk-import the available tools from Excalidraw.
 Now set up the second MCP server for external content fetching.
 
 > **Note:** Jina AI provides a free tier that works without authentication. For higher rate limits and advanced features, you can sign up at [jina.ai](https://jina.ai) and add your API key.
+Click on the link, you will be redirect to excalidraw page. The diagram created by excalidraw should be similar to this.
 
 <img width="800" alt="image" src="./assets/jina-key.png" />
 
@@ -924,6 +925,7 @@ Now set up the second MCP server for external content fetching.
 <img width="800" alt="image" src="./assets/jina-connector-test.png" />
 
 > ✅ **Expected Result:** Jina AI MCP server is reachable.
+> **Tip:** Check the Elastic documentation for the latest status and capabilities of MCP Server and A2A Server features interfaces.
 
 ### Step 2.2.4 — Import Jina AI Tools
 
@@ -946,12 +948,27 @@ Bulk-import the web scraping and content extraction tools.
    - Import these tools like:
      - `jina.parallel_read_url` - Extract and convert web page content to clean, readable markdown format
      - `jina.parallel_search_web` - Search the web for relevant content
+```json
+POST kbn://api/agent_builder/converse
+{
+  "input": "what help you can provide?",
+  "agent_id": "financial_analyst_agent"
+}
+```
 
 > ✅ **Expected Result:** Jina AI tools appear in your tools list with `jina.` prefix.
 
 ### Step 2.2.5 — Add Both MCP Tool Sets to Your Custom Agent
 
 Now extend your Data Visualization Chef with BOTH diagramming and external content capabilities.
+```json
+POST kbn://api/agent_builder/converse/async
+{
+  "input": "Show me the last 5 transactions for AAPL",
+  "agent_id": "financial_analyst_agent",
+  "conversation_id": "15e68f81-5648-4e73-b11b-2b8b3c080550"
+}
+```
 
 <img width="800" alt="image" src="./assets/foodie-excalidraw.png" />
 
@@ -966,6 +983,15 @@ Now extend your Data Visualization Chef with BOTH diagramming and external conte
 <img width="800" alt="image" src="./assets/agent-excalidraw-jina-tools.png" />
 
 > **Note:** Your Data Visualization Chef now has data analysis, visual diagramming, AND external content fetching—a complete toolkit for comprehensive analysis!
+```bash
+curl -X POST "${KIBANA_URL}/api/agent_builder/converse" \
+     -H "Authorization: ApiKey ${API_KEY}" \
+     -H "kbn-xsrf: true" \
+     -H "Content-Type: application/json" \
+     -d '{
+       "input": "what help you can provide?",
+       "agent_id": "financial_analyst_agent"}'
+```
 
 ### Step 2.2.6 — Test Diagram Generation (Excalidraw)
 
@@ -980,6 +1006,10 @@ Let's create a visual diagram through conversation!
 
 
 **Test Prompt 2: Data Architecture Diagram**
+All queries below target the three indices loaded in Lab 3 and can be tested directly in **Discover Menu**.
+
+<img width="3830" height="2004" alt="image" src="https://github.com/user-attachments/assets/a23de7b2-f53f-4d75-83d3-7a861173a347" />
+
 
 <img width="800" alt="image" src="./assets/excalidraw-architecture.png" />
 
@@ -990,6 +1020,46 @@ Draw and export a simple Elasticsearch architecture diagram
 <img width="800" alt="image" src="./assets/excalidraw-advance-architecture.png" />
 
 
+**Q1 — Latest trades for a specific ticker**
+```esql
+FROM financial-transactions
+| WHERE ticker == "AAPL"
+| SORT timestamp DESC
+| LIMIT 10
+```
+
+**Q2 — Total buy volume by sector**
+```esql
+FROM financial-transactions
+| WHERE transaction_type == "buy"
+| STATS total_bought = SUM(total_value) BY sector
+| SORT total_bought DESC
+```
+
+**Q3 — Net flow per customer (CASE inside STATS)**
+```esql
+FROM financial-transactions
+| STATS
+  buy_vol  = SUM(CASE(transaction_type == "buy",  total_value, 0)),
+  sell_vol = SUM(CASE(transaction_type == "sell", total_value, 0)),
+  net      = SUM(CASE(transaction_type == "buy",  total_value, -total_value))
+BY customer_name
+| SORT net DESC
+```
+
+**Q4 — Activity after certain date**
+```esql
+FROM financial-transactions
+| WHERE timestamp >= "2025-01-01"
+| STATS trades = COUNT(*), total_value = SUM(total_value) BY customer_name, transaction_type
+| SORT customer_name ASC
+```
+
+**Q5 — Trade volume by broker**
+```esql
+FROM financial-transactions
+| STATS trade_count = COUNT(*), total_value = SUM(total_value) BY broker
+| SORT total_value DESC
 ```
 Use the drawing tool to create a clear network / data‑flow diagram showing Elastic Agent, Fleet Server, and Elasticsearch data nodes. This diagram will be used as supporting documentation for a change approval board (CAB), so it must be accurate and self‑explanatory. Provide the sharable link after drawing it.
 
@@ -1025,6 +1095,123 @@ Let's use your enhanced custom agent to enrich data analysis with external infor
 
 ```
 Read https://en.wikipedia.org/wiki/Top_Chef and summarise give me a background of the hosts
+#### Group 2 — Portfolio Analysis
+
+**Q6 — Portfolio summary by account**
+```esql
+FROM portfolio-snapshots
+| STATS
+  total_market_value = SUM(market_value),
+  positions          = COUNT(*),
+  total_pnl          = SUM(unrealized_pnl)
+  BY account_id, customer_name
+| SORT total_market_value DESC
+```
+
+**Q7 — Top gaining positions**
+```esql
+FROM portfolio-snapshots
+| WHERE pnl_pct > 0
+| SORT pnl_pct DESC
+| KEEP ticker, customer_name, shares_held,
+  avg_cost_basis, current_price, unrealized_pnl, pnl_pct
+| LIMIT 10
+```
+
+**Q8 — Sector exposure breakdown**
+```esql
+FROM portfolio-snapshots
+| STATS
+  sector_value = SUM(market_value),
+  positions    = COUNT(*),
+  avg_return   = AVG(pnl_pct)
+  BY sector
+| SORT sector_value DESC
+```
+
+**Q9 — All holdings for one account**
+```esql
+FROM portfolio-snapshots
+| WHERE account_id == "ACC-001"
+| KEEP ticker, company_name, sector,
+  shares_held, market_value, unrealized_pnl, pnl_pct
+| SORT pnl_pct DESC
+```
+
+**Q10 — Portfolio value by risk profile**
+```esql
+FROM portfolio-snapshots
+| STATS
+  total_value = SUM(market_value),
+  avg_pnl_pct = AVG(pnl_pct)
+  BY risk_profile
+| SORT total_value DESC
+```
+
+#### Group 3 — Market Event Analysis
+
+**Q11 — Recent positive events**
+```esql
+FROM market-events
+| WHERE impact == "positive"
+| SORT event_date DESC
+| KEEP event_date, ticker, event_type, headline, price_change_pct
+| LIMIT 10
+```
+
+**Q12 — Average price move by event type**
+```esql
+FROM market-events
+| STATS avg_move = AVG(price_change_pct), event_count = COUNT(*)
+  BY event_type
+| SORT avg_move DESC
+```
+
+> ✅ **Expected Result:** `fda_approval` and `analyst_upgrade` show the largest average `price_change_pct` in this dataset.
+
+**Q13 — Stocks with bullish analyst ratings**
+```esql
+FROM market-events
+| WHERE analyst_rating IN ("buy", "strong_buy")
+| KEEP event_date, ticker, company_name, headline,
+  analyst_rating, price_change_pct
+| SORT price_change_pct DESC
+```
+
+**Q14 — Biggest single-day price movers**
+```esql
+FROM market-events
+| WHERE price_change_pct IS NOT NULL
+| SORT price_change_pct DESC
+| KEEP event_date, ticker, event_type, headline,
+  price_before, price_after, price_change_pct
+| LIMIT 5
+```
+
+#### Group 4 — Advanced Patterns
+
+**Q15 — Most traded tickers by spend**
+```esql
+FROM financial-transactions
+| STATS my_trades = COUNT(*), my_spend = SUM(total_value) BY ticker
+| SORT my_spend DESC
+| LIMIT 10
+```
+
+**Q16 — Full position analysis for one ticker**
+
+Demonstrates the `CASE`-inside-`STATS` pattern. In an Agent Builder tool, replace `"TSLA"` with a `?ticker` parameter.
+
+> **Tip:** To turn Q16 into an Agent Builder tool: replace `WHERE ticker == "TSLA"` with `WHERE ticker == ?ticker`, then add `ticker` as a required string parameter in the tool definition.
+
+```esql
+FROM financial-transactions
+| WHERE ticker == "TSLA"
+| STATS
+  total_bought = SUM(CASE(transaction_type == "buy",  total_value, 0)),
+  total_sold   = SUM(CASE(transaction_type == "sell", total_value, 0)),
+  net_shares   = SUM(CASE(transaction_type == "buy",  quantity, -quantity))
+  BY ticker
 ```
 
 The agent will:
