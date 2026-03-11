@@ -465,8 +465,6 @@ First, configure the connection to the Excalidraw MCP server.
 3. Search for **MCP** in the connector type list
 4. Select **MCP Connector**
 
-[Screenshot placeholder: MCP connector configuration form]
-
 5. Configure with the following settings:
 
 | Field | Value |
